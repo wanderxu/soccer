@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
     double alpha=-66.0/90.0;
     std::vector<double> logz={};
     std::vector<double> jlist={};
-    for(int i = 1; i <= maxpoints; ++i) {
+    for(int i = 0; i <= maxpoints; ++i) {
         double J1 = J+i*0.01;
         //auto sqrt_coshj = std::sqrt( std::cosh( J1 )/2.0 );
         //auto sqrt_sinhj = std::sqrt( std::sinh( J1 )/2.0 );
@@ -95,6 +95,6 @@ int main(int argc, char* argv[]) {
     }
     std::ofstream fout("logz.out",std::ios::out);
     fout.precision(16);
-    for(int i = 1; i <= maxpoints; ++i)
-        fout << jlist[i-1] << " " << logz[i-1] << std::endl ;
+    for(int i = 0; i <= maxpoints; ++i)
+        fout << jlist[i] << " " << logz[i] << std::endl ;
 }
