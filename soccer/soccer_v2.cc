@@ -5,6 +5,7 @@ int main(int argc, char* argv[]) {
     double J=1.0;
     auto maxpoints=2000;
     double alpha=-66.0/90.0;
+    //double alpha=0.0;
     std::vector<double> logz={};
     std::vector<double> jlist={};
     for(int i = 0; i <= maxpoints; ++i) {
@@ -43,14 +44,16 @@ int main(int argc, char* argv[]) {
         println( "set tensors");
 
         // set tensors
-        tQ1.set( a1(1), b1(1), b5(1),  q11*q11*q11+q12*q12*q12 );
-        tQ1.set( a1(2), b1(1), b5(1),  q11*q11*q12+q11*q12*q12 );
-        tQ1.set( a1(1), b1(2), b5(1),  q11*q11*q12+q11*q12*q12 );
-        tQ1.set( a1(2), b1(2), b5(1),  q11*q12*q12+q11*q11*q12 );
-        tQ1.set( a1(1), b1(1), b5(2),  q11*q11*q12+q11*q12*q12 );
-        tQ1.set( a1(2), b1(1), b5(2),  q11*q12*q12+q11*q11*q12 );
-        tQ1.set( a1(1), b1(2), b5(2),  q11*q12*q12+q11*q11*q12 );
-        tQ1.set( a1(2), b1(2), b5(2),  q11*q11*q11+q12*q12*q12 );
+        tQ1.set( a1(1), b1(1), b5(1),  (q11*q11*q11+q12*q12*q12).real() );
+        tQ1.set( a1(2), b1(1), b5(1),  (q11*q11*q12+q11*q12*q12).real() );
+        tQ1.set( a1(1), b1(2), b5(1),  (q11*q11*q12+q11*q12*q12).real() );
+        tQ1.set( a1(2), b1(2), b5(1),  (q11*q12*q12+q11*q11*q12).real() );
+        tQ1.set( a1(1), b1(1), b5(2),  (q11*q11*q12+q11*q12*q12).real() );
+        tQ1.set( a1(2), b1(1), b5(2),  (q11*q12*q12+q11*q11*q12).real() );
+        tQ1.set( a1(1), b1(2), b5(2),  (q11*q12*q12+q11*q11*q12).real() );
+        tQ1.set( a1(2), b1(2), b5(2),  (q11*q11*q11+q12*q12*q12).real() );
+
+        //PrintData( tQ1 );
 
         tQ2 = reindex(tQ1, a1,a2, b1,b2, b5,b1);
         tQ3 = reindex(tQ1, a1,a3, b1,b3, b5,b2);
@@ -86,10 +89,14 @@ int main(int argc, char* argv[]) {
         ITensor halfT = fiveT1*fiveT2*fiveT3*fiveT4*fiveT5*fiveT6;
         println( halfT );
 
+        ITensor halfTp = reindex(halfT, c1,c2, c2,c3, c3,c4, c4,c5, c5,c6, c6,c7, c7,c8, c8,c9, c9,c10, c10,c1);
+        println( halfTp );
+
         println( "final contraction:");
         // final contraction
-        auto logz_tmp = std::log((halfT*halfT).cplx().real());
-        printfln( "%.16e", logz_tmp  );
+        //auto logz_tmp = std::log((halfT*halfT).cplx().real());
+        auto logz_tmp = std::log((halfT*halfTp).real());
+        printfln( "%.16e", logz_tmp/60.0  );
         jlist.emplace_back( J1 );
         logz.emplace_back( logz_tmp );
     }
